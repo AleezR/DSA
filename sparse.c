@@ -1,126 +1,134 @@
-#include <stdio.h>
-#define MAX 100
+ #include <stdio.h>
+int main(){
+int i,j,row1,col1,row2,col2,mat1[10][10],mat2[10][10],sp_mat1[10][3],sp_mat2[10][3],k=1,l=1,a=1,b=1,s=1,add[20][3];
+printf("FIRST MATRIX\n");
+printf("Enter the row for the matrix :");
+scanf("%d",&row1);
+printf("Enter the column for the matrix :");
+scanf("%d",&col1);
+for(i=0;i<row1;i++){
+	for(j=0;j<col1;j++){
+		printf("Enter the element :");
+		scanf("%d",&mat1[i][j]);	
+		}
+	}
 
-void readSparse(int sparse[100][100], int rows, int cols) {
-    int i, j;
-    for(i = 0; i < rows; i++) {
-        for(j = 0; j < cols; j++) {
-            scanf("%d", &sparse[i][j]);
+i=j=0;
+printf("SECOND MATRIX\n");
+printf("Enter the row for the matrix :");
+scanf("%d",&row2);
+printf("Enter the column for the matrix :");
+scanf("%d",&col2);
+for( i=0;i<row2;i++){
+	for(j=0;j<col2;j++){
+		printf("Enter the element :");
+		scanf("%d",&mat2[i][j]);	
+		}
+	}
+	
+printf("First matrix\n");
+for(i=0;i<row1;i++){
+	for(j=0;j<col1;j++){
+		printf("%d\t",mat1[i][j]);
+		}
+		printf("\n");
+	}
+printf("Second matrix\n");
+for(i=0;i<row2;i++){
+	for(j=0;j<col2;j++){
+		printf("%d\t",mat2[i][j]);
+		}
+		printf("\n");
+	}
+
+// sparse matrix 1
+for(i=0;i<row1;i++){
+    for(j=0;j<col1;j++){
+        if(mat1[i][j] != 0){
+            sp_mat1[k][0] = i;
+            sp_mat1[k][1] = j;
+            sp_mat1[k][2] = mat1[i][j];
+            k++;
         }
     }
 }
+sp_mat1[0][0] = row1;
+sp_mat1[0][1] = col1;
+sp_mat1[0][2] = k - 1;
 
-int sparseToMatrix(int matrix[MAX][3], int rows, int cols, int sparse[MAX][MAX]) {
-    int i, j, k = 1;
-    for(i = 0; i < rows; i++) {
-        for(j = 0; j < cols; j++) {
-            if(sparse[i][j] != 0) {
-                matrix[k][0] = i;
-                matrix[k][1] = j;
-                matrix[k][2] = sparse[i][j];
-                k++;
-            }
+// sparse matrix 2
+for(i=0;i<row2;i++){
+    for(j=0;j<col2;j++){
+        if(mat2[i][j] != 0){
+            sp_mat2[l][0] = i;
+            sp_mat2[l][1] = j;
+            sp_mat2[l][2] = mat2[i][j];
+            l++;
         }
-    }
-    return k;
-}
-
-void displayMatrix(int matrix[MAX][3], int count, int rows, int cols) {
-    int i, j;
-    matrix[0][0] = rows;
-    matrix[0][1] = cols;
-    matrix[0][2] = count - 1;
-
-    printf("Row\tCol\tValue\n");
-    for(i = 0; i < count; i++) {
-        for(j = 0; j < 3; j++) {
-            printf("%d\t", matrix[i][j]);
-        }
-        printf("\n");
     }
 }
+sp_mat2[0][0] = row2;
+sp_mat2[0][1] = col2;
+sp_mat2[0][2] = l - 1;
 
-int main() {
-    int sparse1[MAX][MAX], sparse2[MAX][MAX];
-    int matrix1[MAX][3], matrix2[MAX][3], result[MAX][3];
-    int rows1, cols1, rows2, cols2;
-    int count1, count2, countResult;
-
-    printf("Enter the number of rows of first sparse matrix: ");
-    scanf("%d", &rows1);
-    printf("Enter the number of columns of first sparse matrix: ");
-    scanf("%d", &cols1);
-    printf("Enter the first sparse matrix:\n");
-    readSparse(sparse1, rows1, cols1);
-    count1 = sparseToMatrix(matrix1, rows1, cols1, sparse1);
-
-    printf("Enter the number of rows of second sparse matrix: ");
-    scanf("%d", &rows2);
-    printf("Enter the number of columns of second sparse matrix: ");
-    scanf("%d", &cols2);
-    printf("Enter the second sparse matrix:\n");
-    readSparse(sparse2, rows2, cols2);
-    count2 = sparseToMatrix(matrix2, rows2, cols2, sparse2);
-
-    printf("\nFirst resultant matrix\n");
-    displayMatrix(matrix1, count1, rows1, cols1);
-
-    printf("\nSecond resultant matrix\n");
-    displayMatrix(matrix2, count2, rows2, cols2);
-
-    if (rows1 != rows2 || cols1 != cols2) {
-        printf("\nMatrices dimensions do not match for addition.\n");
-        return 1;
-    }
-
-    int i = 1, j = 1, k = 1;
-    result[0][0] = rows1;
-    result[0][1] = cols1;
-
-    while (i < count1 && j < count2) {
-        if (matrix1[i][0] == matrix2[j][0] && matrix1[i][1] == matrix2[j][1]) {
-            int sumVal = matrix1[i][2] + matrix2[j][2];
-            if (sumVal != 0) {
-                result[k][0] = matrix1[i][0];
-                result[k][1] = matrix1[i][1];
-                result[k][2] = sumVal;
-                k++;
-            }
-            i++; j++;
+// addition 
+if(row1 == row2 && col1 == col2){
+    while(a < k && b < l){
+        if(sp_mat1[a][0] == sp_mat2[b][0] && sp_mat1[a][1] == sp_mat2[b][1]){
+            add[s][0] = sp_mat1[a][0];
+            add[s][1] = sp_mat1[a][1];
+            add[s][2] = sp_mat1[a][2] + sp_mat2[b][2];
+            a++; b++; s++;
         }
-        else if (matrix1[i][0] < matrix2[j][0] || 
-                 (matrix1[i][0] == matrix2[j][0] && matrix1[i][1] < matrix2[j][1])) {
-            result[k][0] = matrix1[i][0];
-            result[k][1] = matrix1[i][1];
-            result[k][2] = matrix1[i][2];
-            k++; i++;
+        else if(sp_mat1[a][0] < sp_mat2[b][0] || 
+               (sp_mat1[a][0] == sp_mat2[b][0] && sp_mat1[a][1] < sp_mat2[b][1])){
+            add[s][0] = sp_mat1[a][0];
+            add[s][1] = sp_mat1[a][1];
+            add[s][2] = sp_mat1[a][2];
+            a++; s++;
         }
-        else {
-            result[k][0] = matrix2[j][0];
-            result[k][1] = matrix2[j][1];
-            result[k][2] = matrix2[j][2];
-            k++; j++;
+        else{
+            add[s][0] = sp_mat2[b][0];
+            add[s][1] = sp_mat2[b][1];
+            add[s][2] = sp_mat2[b][2];
+            b++; s++;
         }
     }
-
-    while (i < count1) {
-        result[k][0] = matrix1[i][0];
-        result[k][1] = matrix1[i][1];
-        result[k][2] = matrix1[i][2];
-        k++; i++;
+    
+    while(a < k){
+        add[s][0] = sp_mat1[a][0];
+        add[s][1] = sp_mat1[a][1];
+        add[s][2] = sp_mat1[a][2];
+        a++; s++;
+    }
+    while(b < l){
+        add[s][0] = sp_mat2[b][0];
+        add[s][1] = sp_mat2[b][1];
+        add[s][2] = sp_mat2[b][2];
+        b++; s++;
     }
 
-    while (j < count2) {
-        result[k][0] = matrix2[j][0];
-        result[k][1] = matrix2[j][1];
-        result[k][2] = matrix2[j][2];
-        k++; j++;
-    }
+    add[0][0] = row1;
+    add[0][1] = col1;
+    add[0][2] = s - 1;
+}
 
-    result[0][2] = k - 1;
+printf("THE SUM OF SPARSE MATRIX .....\n");
+for(int h=0;h<s;h++){
+	printf("%d\t%d\t%d\n",add[h][0],add[h][1],add[h][2]);
+}
+int trans;
 
-    printf("\nResultant matrix after addition\n");
-    displayMatrix(result, k, rows1, cols1);
+for(int h=0;h<s;h++){
+	trans=add[h][0];
+	add[h][0]=add[h][1];
+	add[h][1]=trans;
+}
 
-    return 0;
+printf("TRANSPOSE....\n");
+for(int h=0;h<s;h++){
+    printf("%d\t%d\t%d\n",add[h][0],add[h][1],add[h][2]);
+}
+
+return 0;
 }
